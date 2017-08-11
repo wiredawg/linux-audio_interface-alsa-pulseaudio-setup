@@ -1,5 +1,7 @@
 # How-To: Select audio source from Linux command line (Debian 8.8)
 
+> **UPDATE** 2017-08-11: Also works on Ubuntu 17.04, see `bin/toggle-pulse-device`
+
 I spent way to much time digging into ALSA configuration on this issue not
 to write something up to remember later on. I recently picked up an audio
 interface to both act as a microphone preamp and also a headphone amp for
