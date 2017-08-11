@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# These help find the usb device
+#pactl list | grep -iP '^Sink #\d' -A2 | tail -n 1 | cut -d':' -f 2
+#pactl list | grep -iP '^Source #\d' -A2 | tail -n 1 | cut -d':' -f 2
+
+def_sink=alsa_output.pci-0000_00_1b.0.analog-stereo
+def_source=alsa_input.pci-0000_00_1b.0.analog-stereo
+
+usb_sink=alsa_output.usb-BEHRINGER_UMC202HD_192k-00.iec958-stereo
+usb_source=alsa_input.usb-BEHRINGER_UMC202HD_192k-00.iec958-stereo
+
+current_sink=$(pactl info | grep "Default Sink" | cut -d":" -f 2 | tr -d " ")
+current_source=$(pactl info | grep "Default Source" | cut -d":" -f 2 | tr -d " ")
+
+if [ "$current_sink" != "$def_sink" ]
+then
+    new_sink=$def_sink
+    new_source=$def_source
+else
+    new_sink=$usb_sink
+    new_source=$usb_source
+fi
+
+echo "set-default-sink   $new_sink" | pacmd
+echo "set-default-source $new_source" | pacmd
+
+echo "set-sink-volume $new_sink 65536" | pacmd
+echo "set-source-volume $new_source 65536" | pacmd
+
+echo "New device info:"
+pactl info | grep "Default S[oi]"
